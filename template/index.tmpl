@@ -2,14 +2,16 @@
 <section class="hero is-primary is-medium">
   <div class="hero-foot">
     <div class="columns is-mobile">
+      {{ range .Movies}}
       <div class="column">
         <li class="movie-choice">
-          {{if .Image}}
-          <img src="" class="desktop"/>
+          {{if .SmallImgSrc}}
+          <img src="{{ .SmallImgSrc }}" class="desktop"/>
           {{end}}
-          <p class="mobile"></p>
+          <p class="mobile">{{ .Subtitle }}</p>
         </li>
       </div>
+      {{ end }}
     </div>
   </div>
 </section>
