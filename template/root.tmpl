@@ -15,6 +15,45 @@
 
     </div>
     {{template "root-script" .}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.2/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.1/vue-router.min.js"></script>
+    <script>
+      // Intro Component
+      const Intro = {
+        template:
+          `<div class="hero-body" style="background: #1e1d1d">
+            <div class="container has-text-centered">
+              <div class="columns">
+                <div class="column is-half is-offset-one-quarter vertical-align">
+                  <h1 class="home-intro">
+                    VueFlix
+                  </h1>
+                  <p class="home-subintro">Select a movie below from the list of critically acclaimed Christopher Nolan films.</p>
+                </div>
+              </div>
+            </div>
+          </div>`
+      }
+
+      // config router
+      const router = new VueRouter({
+        mode: 'history',
+        routes: [
+          { path: '/', component: Intro },
+          { path: '*', redirect: '/' },
+        ]
+      })
+
+      // Vue instance
+      const rootApp = new Vue({
+        el: '#app',
+        router,
+        data () {
+          return {
+          }
+        }
+      })
+    </script>
   </body>
 </html>
 {{end}}

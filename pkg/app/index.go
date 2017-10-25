@@ -8,10 +8,6 @@ import (
 )
 
 func index(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
-		http.NotFound(w, r)
-		return
-	}
 	movies := model.ListMovies()
 	view.Index(w, &view.MovieData{
 		Movies: movies,

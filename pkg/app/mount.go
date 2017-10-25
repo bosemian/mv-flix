@@ -1,6 +1,8 @@
 package app
 
-import "net/http"
+import (
+	"net/http"
+)
 
 // Mount function to mount path url
 func Mount(mux *http.ServeMux) {
