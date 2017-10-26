@@ -33,16 +33,54 @@
       // Movie Component
       const Movie = {
         template:
-          `<div>
-            <div class="hero-body">
-              <div class="container has-text-centered">
-              <div class="columns">
-                <div class="column is-half is-offset-one-quarter vertical-align">
-                <h1 class="home-intro">
-                  {{ selectedMovie.title }}
-                </h1>
+          `<div v-if="selectedMovie.largeImgSrc" class="hero-body"
+            :style="{ 'background-image': 'url('+ selectedMovie.largeImgSrc +')' }">
+            <header class="nav">
+              <div class="container">
+                <div class="nav-left">
+                <a class="nav-item">
+                  <i class="fa fa-bars" aria-hidden="true"></i>
+                </a>
+                <router-link to="/" class="nav-item is-active">
+                  Home
+                </router-link>
+                <a class="nav-item is-active">
+                  <span class="tag is-rounded">Films</span>
+                </a>
+                <a class="nav-item is-active">
+                  Shows
+                </a>
+                <a class="nav-item is-active">
+                  Music
+                </a>
+                </div>
+                <div class="nav-right desktop">
+                <span class="nav-item">
+                  <a class="title">
+                  MVFlix
+                  </a>
+                </span>
                 </div>
               </div>
+            </header>
+            <div class="container description-container">
+              <div class="columns">
+                <div class="column is-three-quarters">
+                  <h1 class="title">{{ selectedMovie.title }}</h1>
+                  <h4 class="subtitle">
+                    <p class="subtitle-tag">{{ selectedMovie.duration }}</p>
+                    <p class="subtitle-tag">{{ selectedMovie.genre }}</p>
+                    <p class="subtitle-tag">{{ selectedMovie.releaseDate }}</p>
+                  </h4>
+                  <p class="description">{{ selectedMovie.description }}</p>
+                  <div class="links">
+                    <router-link
+                      :to="{path: '/' + $route.params.id + '/trailer'}"
+                      class="button play-button">
+                      Play <i class="fa fa-play"></i>
+                    </router-link>
+                  </div>
+                </div>
               </div>
             </div>
           </div>`,
@@ -64,7 +102,7 @@
             const id = this.$route.params.id
             api.get(`movie/${id}`)
               .then((res) => {
-                this.selectedMovie = res.data
+                this.selectedMovie = res.data.movie
               })
           }
         }
@@ -88,7 +126,6 @@
 
       // config router
       const router = new VueRouter({
-        mode: 'history',
         routes: [
           { path: '/', component: Intro },
           { path: '/:id', component: Movie },
