@@ -10,13 +10,14 @@
   <body>
     <div id="app">
       <section class="hero is-primary is-medium">
+        <router-view></router-view>
         <div class="hero-foot">
          <div class="columns is-mobile">
            <div v-for="movieChoice in movieChoices" class="column">
-             <li class="movie-choice">
+             <router-link tag="li" :to="`/${movieChoice.id}`" class="movie-choice">
                <img :src="`${movieChoice.smallImgSrc}`" class="desktop"/>
                <p class="mobile">{{ movieChoice.subtitle }}</p>
-             </li>
+             </router-link>
            </div>
           </div>
         </div>
@@ -26,9 +27,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.1/vue-router.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.0/axios.js"></script>
     <script>
-      const url = 'localhost:3000'
-      const port = ':3000'
-      const API_URL = url + port
+      var api = axios.create({
+        headers: { 'Access-Control-Allow-Origin': '*' }
+      })
       // Movie Component
       const Movie = {
         template:
@@ -50,6 +51,9 @@
             selectedMovie: null
           }
         },
+        created () {
+          this.selectMovie()
+        },
         watch: {
           $route () {
             this.selectMovie()
@@ -58,7 +62,7 @@
         methods: {
           selectMovie () {
             const id = this.$route.params.id
-            axios.get(`${url}:${port}/movie/${id}`)
+            api.get(`movie/${id}`)
               .then((res) => {
                 this.selectedMovie = res.data
               })
@@ -102,9 +106,9 @@
           }
         },
         created () {
-          axios.get(`${API_URL}/movies`)
+          api.get('movies')
             .then((res) => {
-              this.movieChoices = res.data
+              this.movieChoices = res.data.movies
             })
         }
       })

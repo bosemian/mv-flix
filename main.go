@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 
+	"github.com/rs/cors"
+
 	"github.com/bosemian/mv-flix/app"
 )
 
@@ -13,5 +15,5 @@ const (
 func main() {
 	mux := http.NewServeMux()
 	app.Mount(mux)
-	http.ListenAndServe(port, mux)
+	http.ListenAndServe(port, cors.Default().Handler(mux))
 }
