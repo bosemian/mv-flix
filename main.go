@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/bosemian/mv-flix/pkg/app"
+	"github.com/bosemian/mv-flix/app"
 )
 
 const (

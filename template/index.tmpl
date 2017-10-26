@@ -1,21 +1,32 @@
 {{define "root-body"}}
-<section class="hero is-primary is-medium">
-  <router-view></router-view>
-  <div class="hero-foot">
-    <div class="columns is-mobile">
-      {{ range .Movies}}
-      <div class="column">
-        <li class="movie-choice">
+<div class="hero-body" style="background: #1e1d1d">
+  <div class="container has-text-centered">
+    <div class="columns">
+      <div class="column is-half is-offset-one-quarter vertical-align">
+        <h1 class="home-intro">
+          MVFlix
+        </h1>
+        <p class="home-subintro">Select a movie below from the list of critically acclaimed Christopher Nolan films.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="hero-foot">
+  <div class="columns is-mobile">
+    {{ range .Movies}}
+    <div class="column">
+      <li class="movie-choice">
+        <a href="movie/{{ .Id }}">
           {{if .SmallImgSrc}}
           <img src="{{ .SmallImgSrc }}" class="desktop"/>
           {{end}}
           <p class="mobile">{{ .Subtitle }}</p>
-        </li>
-      </div>
-      {{ end }}
+        </a>
+      </li>
     </div>
+    {{ end }}
   </div>
-</section>
+</div>
 {{end}}
 {{define "root-script"}}
 {{end}}

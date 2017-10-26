@@ -1,4 +1,3 @@
-{{define "root"}}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,35 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.4/css/bulma.css">
     <link href="/public/css/style.css" rel="stylesheet">
-    {{template "root-style" .}}
   </head>
   <body>
     <div id="app">
-      {{template "root-body" .}}
-      <div class="hero-foot">
-        <div class="columns is-mobile">
-          {{ range .Movies}}
-          <div class="column">
-            <li class="movie-choice">
-              <a href="movie/{{ .Id }}">
-                {{if .SmallImgSrc}}
-                <img src="{{ .SmallImgSrc }}" class="desktop"/>
-                {{end}}
-                <p class="mobile">{{ .Subtitle }}</p>
-              </a>
-            </li>
+      <section class="hero is-primary is-medium">
+        <div class="hero-foot">
+         <div class="columns is-mobile">
+           <div v-for="movieChoice in movieChoices" class="column">
+             <li class="movie-choice">
+               <img :src="`${movieChoice.smallImgSrc}`" class="desktop"/>
+               <p class="mobile">{{ movieChoice.subtitle }}</p>
+             </li>
+           </div>
           </div>
-          {{ end }}
         </div>
-      </div>
+      </section>
     </div>
-    {{template "root-script" .}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.2/vue.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.1/vue-router.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.0/axios.js"></script>
     <script>
       const url = 'localhost:3000'
-      const port = '3000'
+      const port = ':3000'
+      const API_URL = url + port
       // Movie Component
       const Movie = {
         template:
@@ -45,7 +38,7 @@
               <div class="columns">
                 <div class="column is-half is-offset-one-quarter vertical-align">
                 <h1 class="home-intro">
-                  {{ .Title }}
+                  {{ selectedMovie.title }}
                 </h1>
                 </div>
               </div>
@@ -80,7 +73,7 @@
               <div class="columns">
                 <div class="column is-half is-offset-one-quarter vertical-align">
                   <h1 class="home-intro">
-                    VueFlix
+                    MVFlix
                   </h1>
                   <p class="home-subintro">Select a movie below from the list of critically acclaimed Christopher Nolan films.</p>
                 </div>
@@ -102,9 +95,19 @@
       // Vue instance
       const rootApp = new Vue({
         el: '#app',
-        router
+        router,
+        data () {
+          return {
+            movieChoices: null
+          }
+        },
+        created () {
+          axios.get(`${API_URL}/movies`)
+            .then((res) => {
+              this.movieChoices = res.data
+            })
+        }
       })
     </script>
   </body>
 </html>
-{{end}}
