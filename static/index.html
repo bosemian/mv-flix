@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.4/css/bulma.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="/public/css/style.css" rel="stylesheet">
   </head>
   <body>
@@ -15,8 +16,9 @@
          <div class="columns is-mobile">
            <div v-for="movieChoice in movieChoices" class="column">
              <router-link tag="li" :to="`/${movieChoice.id}`" class="movie-choice">
-               <img :src="`${movieChoice.smallImgSrc}`" class="desktop"/>
-               <p class="mobile">{{ movieChoice.subtitle }}</p>
+              <i :class="[{ 'fa fa-check-circle favorite-check':  movieChoice.favorite }]"></i>
+              <img :src="`${movieChoice.smallImgSrc}`" class="desktop"/>
+              <p class="mobile">{{ movieChoice.subtitle }}</p>
              </router-link>
            </div>
           </div>
@@ -30,10 +32,43 @@
       var api = axios.create({
         headers: { 'Access-Control-Allow-Origin': '*' }
       })
+
+      // MovieTrailer Component
+      const MovieTrailer = {
+        template: `
+          <div class="trailer-body" style="background: #1e1d1d">
+            <div class="has-text-centered">
+              <div class="columns">
+                <div class="column vertical-align">
+                  <iframe
+                    allowFullScreen
+                    frameborder="0"
+                    height="376"
+                    :src="trailerUrlPath"
+                    style="width: 100%; min-width: 536px"
+                    />
+                </div>
+              </div>
+            </div>
+          </div>`,
+          created () {
+            const id = this.$route.params.id
+            api.get(`movie/${id}`)
+              .then((res) => {
+                this.trailerUrlPath = res.data.movie.trailerPath
+              })
+          },
+          data () {
+            return {
+              trailerUrlPath: null
+            }
+          }
+        }
       // Movie Component
       const Movie = {
         template:
-          `<div v-if="selectedMovie.largeImgSrc" class="hero-body"
+          `<div
+            :class="[{ 'favorite-shadow': selectedMovie.favorite }, 'hero-body']"
             :style="{ 'background-image': 'url('+ selectedMovie.largeImgSrc +')' }">
             <header class="nav">
               <div class="container">
@@ -79,6 +114,20 @@
                       class="button play-button">
                       Play <i class="fa fa-play"></i>
                     </router-link>
+                    <a
+                      class="button is-link favorites-button"
+                      @click="addToFavorites">
+                      <span
+                        :class="[{ 'hide': selectedMovie.favorite }]">
+                      Add to
+                      </span>
+                      <span
+                        :class="[{ 'hide': !selectedMovie.favorite }]">
+                      Remove from
+                      </span>
+                        &nbsp;favorites
+                      <i class="fa fa-plus-square-o"></i>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -102,11 +151,15 @@
             const id = this.$route.params.id
             api.get(`movie/${id}`)
               .then((res) => {
+                console.log(res.data.movie)
                 this.selectedMovie = res.data.movie
               })
+          },
+          addToFavorites() {
+            this.selectedMovie.favorite =!this.selectedMovie.favorite
           }
         }
-        }
+      }
       // Intro Component
       const Intro = {
         template:
@@ -129,6 +182,7 @@
         routes: [
           { path: '/', component: Intro },
           { path: '/:id', component: Movie },
+          { path: '/:id/trailer', component: MovieTrailer },
           { path: '*', redirect: '/' },
         ]
       })
