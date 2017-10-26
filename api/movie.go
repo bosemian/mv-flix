@@ -7,6 +7,7 @@ import (
 type Movier interface {
 	List() (*MovieList, error)
 	Get(id string) (*MovieData, error)
+	AddFavorite(id string) (*MovieData, error)
 }
 
 type MovieList struct {
@@ -26,5 +27,12 @@ func (m *MovieList) List() (*MovieList, error) {
 func (md *MovieData) Get(id string) (*MovieData, error) {
 	movie := model.GetMovie(id)
 	md.Movie = movie
+	return md, nil
+}
+
+func (md *MovieData) AddFavorite(id string) (*MovieData, error) {
+	movie := model.GetMovie(id)
+	md.Movie = movie
+	md.Movie.Favorite = !md.Movie.Favorite
 	return md, nil
 }

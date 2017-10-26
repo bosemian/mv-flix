@@ -156,7 +156,10 @@
               })
           },
           addToFavorites() {
-            this.selectedMovie.favorite =!this.selectedMovie.favorite
+            api.post('favorite', { id: this.$route.params.id })
+              .then((res) => {
+                this.selectedMovie.favorite = res.data.movie.favorite
+              })
           }
         }
       }
