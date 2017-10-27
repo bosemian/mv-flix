@@ -53,14 +53,11 @@ const MovieTrailer = {
             <a class="nav-item is-active">
               <span class="tag is-rounded">Films</span>
             </a>
-            <a class="nav-item is-active">
+            <router-link :to="{path: '/' + $route.params.id + '/trailer'}" class="nav-item is-active">
               Shows
-            </a>
-            <a class="nav-item is-active">
-              Music
-            </a>
+            </router-link>
             </div>
-            <div class="nav-right desktop">
+            <div class="nav-right desktop txt-icon">
             <span class="nav-item">
               <a class="title">
               MVFlix
