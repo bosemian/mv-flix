@@ -1,19 +1,14 @@
 pipeline {
     agent any
-    tools {
-        nodejs 'nodejs'
-    }
+    def app
     stages {
         stage('Cloning Git') {
             steps {
                 checkout scm
             }
         }
-        stage('Initialize') {
-            steps {
-                sh 'yarn -version'
-                sh 'docker -v'
-            }
+        stage('Build Image') {
+            app = docker.build("test:go")
         }
     }
 }
