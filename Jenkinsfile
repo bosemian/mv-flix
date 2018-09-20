@@ -9,10 +9,11 @@ pipeline {
             }
         }
         stage('Build Image') {
-            script {
-                app = docker.build("my-image:${env.BUILD_ID}")
+            steps {
+                script {
+                    app = docker.build("my-image:${env.BUILD_ID}")
+                }   
             }
- 
         }
     }
 }
