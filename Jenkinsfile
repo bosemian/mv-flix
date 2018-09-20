@@ -8,7 +8,10 @@ pipeline {
             }
         }
         stage('Build Image') {
-            app = docker.build("test:go")
+            script {
+                def app = docker.build("my-image:${env.BUILD_ID}")
+            }
+ 
         }
     }
 }
