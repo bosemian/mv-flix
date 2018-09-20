@@ -1,6 +1,8 @@
 pipeline {
     agent any
-    def app
+    environment { 
+        app = ''
+    }
     stages {
         stage('Cloning Git') {
             steps {
