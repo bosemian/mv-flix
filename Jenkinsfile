@@ -4,6 +4,7 @@ node {
     }
     
     stage('Test Docker') {
-        docker.build('go:mv-flix')
+        sh 'docker -v'
+        sh 'docker ps -a'
     }
 }
