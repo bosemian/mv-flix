@@ -1,19 +1,9 @@
-def app
-
-pipeline {
-    agent any
-    stages {
-        stage('Cloning Git') {
-            steps {
-                checkout scm
-            }
-        }
-        stage('Build Image') {
-            steps {
-                script {
-                    app = docker.build("my-image:${env.BUILD_ID}")
-                }   
-            }
-        }
+node('master') {
+    stage('Cloning repo') {
+        checkout scm
+    }
+    
+    stage('Test Docker') {
+        docker.build('go:mv-flix')
     }
 }
